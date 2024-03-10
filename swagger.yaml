@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: "kadukko/prisma-mongodb-fastify"
+  version: "1.0.0"
+paths:
+  /register:
+    post:
+      summary: "Registrar um novo usuário"
+      description: "Cria um novo usuário no sistema."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterControllerRequestBody"
+      responses:
+        '200':
+          description: "Usuário registrado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        '400':
+          description: "Erro de validação ou email já em uso"
+  /login:
+    post:
+      summary: "Autenticar um usuário"
+      description: "Verifica as credenciais do usuário e gera um token de autenticação."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginControllerRequestBody"
+      responses:
+        '200':
+          description: "Usuário autenticado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        '400':
+          description: "Credenciais inválidas"
+  /logout:
+    post:
+      summary: "Encerrar a sessão de um usuário"
+      description: "Remove o token de autenticação do usuário, encerrando a sessão."
+      responses:
+        '200':
+          description: "Sessão encerrada com sucesso"
+        '401':
+          description: "Usuário não autenticado"
+  /user:
+    get:
+      summary: "Obter informações do usuário autenticado"
+      description: "Retorna informações do usuário autenticado com base no token de autenticação."
+      responses:
+        '200':
+          description: "Informações do usuário obtidas com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        '401':
+          description: "Usuário não autenticado"
+        '404':
+          description: "Usuário inválido"
+components:
+  schemas:
+    RegisterControllerRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+    LoginControllerRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RicardoHenrique/Prisma/1.0.0
